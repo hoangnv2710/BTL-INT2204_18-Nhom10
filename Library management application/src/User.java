@@ -1,14 +1,16 @@
 public abstract class User {
-    private String name;
-    private int age;
-    private String phoneNumber;
-    private String userId;
+    protected String name;
+    protected int yearOfBirth;
+    protected String phoneNumber;
+    protected String userId;
+    protected String password;
 
-    public User(String name, int age, String userId, String phoneNumber) {
+    public User(String name, int yearOfBirth, String userId, String phoneNumber, String password) {
         this.name = name;
-        this.age = age;
+        this.yearOfBirth = yearOfBirth;
         this.userId = userId;
         this.phoneNumber = phoneNumber;
+        this.password = password;
     }
 
     public String getName() {
@@ -19,12 +21,12 @@ public abstract class User {
         this.name = name;
     }
 
-    public int getAge() {
-        return age;
+    public int getYearOfBirth() {
+        return yearOfBirth;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setYearOfBirth(int yearOfBirth) {
+        this.yearOfBirth = yearOfBirth;
     }
 
     public String getPhoneNumber() {
@@ -43,7 +45,13 @@ public abstract class User {
         this.userId = userId;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
+    public String getPassword() {
+        return password;
+    }
 
     public abstract String printInfo();
 }

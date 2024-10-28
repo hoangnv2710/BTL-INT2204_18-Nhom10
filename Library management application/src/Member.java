@@ -1,11 +1,12 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class Member extends User {
-    private List<Document> borrowedDocuments;
+    private List<Document> borrowedDocuments = new ArrayList<Document>();
 
-    public Member(String name, int age, String userId, String phoneNumber, List<Document> borrowedDocuments) {
-        super(name, age, userId, phoneNumber);
-        this.borrowedDocuments = borrowedDocuments;
+    public Member(String name, int yearOfBirth, String userId, String phoneNumber, String password) {
+        super(name, yearOfBirth, userId, phoneNumber, password);
+        this.borrowedDocuments = new ArrayList<Document>();
     }
 
     public List<Document> getBorrowedDocuments() {
@@ -16,10 +17,6 @@ public class Member extends User {
         this.borrowedDocuments = borrowedDocuments;
     }
 
-    public void borrowDocuments(List<Document> documents) {
-        this.borrowedDocuments.addAll(documents);
-    }
-
     public boolean borrowDocument(Document document) {
         if (this.borrowedDocuments.contains(document)) {
             borrowedDocuments.add(document);
@@ -28,9 +25,10 @@ public class Member extends User {
         return false;
     }
 
-
-    public void returnBorrowedDocuments(List<Document> documents) {
-        this.borrowedDocuments.removeAll(documents);
+    public void borrowDocuments(List<Document> documents) {
+        for (Document document : documents) {
+            borrowedDocuments.add(document);
+        }
     }
 
     public boolean returnBorrowedDocument(Document document) {
@@ -40,6 +38,13 @@ public class Member extends User {
         }
         return false;
     }
+
+    public void returnBorrowedDocuments(List<Document> documents) {
+        for (Document document : documents) {
+            returnBorrowedDocument(document);
+        }
+    }
+
 
     @Override
     public String printInfo() {

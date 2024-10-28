@@ -1,8 +1,8 @@
 public abstract class Document {
-    private String title;
-    private String author;
-    private String ISBN;
-    private int quantity;
+    protected String title;
+    protected String author;
+    protected String ISBN;
+    protected int quantity;
 
     public Document(String title, String author, String ISBN, int quantity) {
         this.title = title;

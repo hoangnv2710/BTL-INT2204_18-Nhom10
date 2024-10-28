@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Library {
     private static Library instance;
@@ -27,42 +28,23 @@ public class Library {
         return users;
     }
 
-    public boolean addDocument(Document document) {
-        for (Document doc : documents) {
-            if(doc.getISBN().equals(document.getISBN())) {
-                return false;
-            }
-        }
-        documents.add(document);
-        return true;
-    }
 
     public boolean addUser(User newUser) {
-        for (User user : users) {
-            if(user.getUserId().equals(newUser.getUserId()) || user.getPhoneNumber().equals(newUser.getPhoneNumber())) {
-                return false;
-            }
+        Optional<User> userOpt = findUserByUserId(newUser.getUserId());
+        if (userOpt.isPresent()) {
+            return false;
         }
         users.add(newUser);
         return true;
     }
 
-    public boolean removeDocument(Document document) {
-        if (documents.contains(document)) {
-            documents.remove(document);
-            return true;
-        }
-        return false;
-    }
-
-    public boolean removeDocument(String ISBN) {
-        for (Document document : documents) {
-            if (document.getISBN().equals(ISBN)) {
-                documents.remove(document);
-                return true;
+    public Optional<User> findUserByUserId(String userId) {
+        for (User user : users) {
+            if(user.getUserId().equals(userId)) {
+                return Optional.of(user);
             }
         }
-        return false;
+        return Optional.empty();
     }
 
     public boolean removeUser(User user) {
@@ -74,28 +56,42 @@ public class Library {
 
     }
 
-    public boolean removeUser(String userId) {
-        for (User user : users) {
-            if (user.getUserId().equals(userId)) {
-                users.remove(user);
-                return true;
-            }
+    public boolean removeUserByUserId(String userId) {
+        Optional<User> userOpt = findUserByUserId(userId);
+        if (userOpt.isPresent()) {
+            users.remove(userOpt.get());
+            return true;
         }
         return false;
     }
 
     public boolean userBorrow(String ISBN, String userId) {
-            for (User user : users) {
-                if(user.getUserId().equals(userId) && user instanceof Member) {
-                    for (Document document : documents) {
-                        if(document.getISBN().equals(ISBN) && document.getQuantity() > 0) {
-                            document.setQuantity(document.getQuantity() - 1);
-                            ((Member) user).borrowDocument(document);
-                            return true;
-                        }
+        Optional<User> userOpt = findUserByUserId(userId);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            if (user instanceof Member) {
+                Optional<Document> docOpt = findDocumentByIBSN(ISBN);
+                if (docOpt.isPresent()) {
+                    Document doc = docOpt.get();
+                    if (doc.getQuantity() > 0) {
+                        doc.setQuantity(doc.getQuantity() - 1);
+                        ((Member) user).borrowDocument(doc);
+                        return true;
                     }
                 }
             }
+        }
+//            for (User user : users) {
+//                if(user.getUserId().equals(userId) && user instanceof Member) {
+//                    for (Document document : documents) {
+//                        if(document.getISBN().equals(ISBN) && document.getQuantity() > 0) {
+//                            document.setQuantity(document.getQuantity() - 1);
+//                            ((Member) user).borrowDocument(document);
+//                            return true;
+//                        }
+//                    }
+//                }
+//            }
             return false;
     }
 
@@ -114,8 +110,87 @@ public class Library {
         return false;
     }
 
-    public String printDocumentsInfo() {
+    public boolean addDocument(Document document) {
+        for (Document doc : documents) {
+            if(doc.getISBN().equals(document.getISBN())) {
+                return false;
+            }
+        }
+        documents.add(document);
+        return true;
+    }
 
-        return "";
+    public boolean removeDocument(Document document) {
+        if (documents.contains(document)) {
+            documents.remove(document);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removeDocumentByISBN(String ISBN) {
+        Optional<Document> docOpt = findDocumentByIBSN(ISBN);
+        if (docOpt.isPresent()) {
+            documents.remove(docOpt.get());
+            return true;
+        }
+        return false;
+    }
+
+    public Optional<Document> findDocumentByIBSN(String IBSN) {
+        for (Document document : documents) {
+            if(document.getISBN().equals(IBSN)) {
+                return Optional.of(document);
+            }
+        }
+        return Optional.empty();
+    }
+
+    public List <Document> findDocumentsByAuthor(String author) {
+        List<Document> list = new ArrayList<>();
+        for (Document document : documents) {
+            if(document.getAuthor().equals(author)) {
+                list.add(document);
+            }
+        }
+        return list;
+    }
+
+    public List <Document> findDocumentsByTitle(String title) {
+        List<Document> list = new ArrayList<>();
+        for (Document document : documents) {
+            if(document.getTitle().equals(title)) {
+                list.add(document);
+            }
+        }
+        return list;
+    }
+
+    public List<Document> findBooksByGenre(String genre) {
+        List<Document> list = new ArrayList<>();
+        for (Document document : documents) {
+            if (document instanceof Book && ((Book) document).getGenre().equals(genre)) {
+                list.add(document);
+            }
+        }
+        return list;
+    }
+
+    public List<Document> findThesesByTopic(String topic) {
+        List<Document> list = new ArrayList<>();
+        for (Document document : documents) {
+            if (document instanceof Thesis && ((Thesis) document).getTopic().equals(topic)) {
+                list.add(document);
+            }
+        }
+        return list;
+    }
+
+    public String printDocumentsInfo() {
+        String info = "";
+        for (Document document : documents) {
+            info += document.printInfo() + "\n";
+        }
+            return info;
     }
 }

@@ -15,6 +15,6 @@ public class Thesis extends Document {
 
     @Override
     public String printInfo() {
-        return "";
+        return String.format("%s\n%s\n%s\n",getTitle(),getAuthor(),getISBN());
     }
 }

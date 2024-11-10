@@ -18,7 +18,7 @@ public class Member extends User {
     }
 
     public boolean borrowDocument(Document document) {
-        if (this.borrowedDocuments.contains(document)) {
+        if (!this.borrowedDocuments.contains(document)) {
             borrowedDocuments.add(document);
             return true;
         }
@@ -29,6 +29,10 @@ public class Member extends User {
         for (Document document : documents) {
             borrowedDocuments.add(document);
         }
+    }
+
+    public boolean isBorrowedDocument(Document document) {
+        return borrowedDocuments.contains(document);
     }
 
     public boolean returnBorrowedDocument(Document document) {
@@ -45,10 +49,22 @@ public class Member extends User {
         }
     }
 
+    public String borrowedInfo() {
+        if (borrowedDocuments.isEmpty()) {
+            return name + " hasn't borrowed any documents.";
+        } else {
+            String info = name + " has borrowed the following documents\n";
+            for (Document document : borrowedDocuments) {
+                info += "\t" + document.getISBN() + " - " + document.getTitle() + " - " + document.getAuthor()   + "\n";
+            }
+            return info;
+        }
+    }
 
     @Override
     public String printInfo() {
-        return "";
+        return String.format("User ID: %s\n\tPassword: %s\n\tName: %s\n\tYear of Birth: %d\n\tPhone number: %s\n",
+                userId, password, name, yearOfBirth, phoneNumber) + borrowedInfo();
     }
 
 }

@@ -15,6 +15,7 @@ public class Book extends Document {
 
     @Override
     public String printInfo() {
-        return String.format("%s\n%s\n%s\n",getTitle(),getAuthor(),getISBN());
+        return String.format("ISBN: %s\n\tTitle: %s\n\tAuthor: %s\n\tDocument type: Book\n\tGenre: %s\n\tQuantity: %d\n",
+                ISBN, title, author, genre, quantity);
     }
 }

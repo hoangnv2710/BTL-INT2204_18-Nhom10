@@ -11,6 +11,11 @@ public class Library {
     private Library() {
         documents = new ArrayList<Document>();
         users = new ArrayList<User>();
+        addUser(new Librarian("Hoang",2003,"2102","0948","123456"));
+        addUser(new Member("tien",2003,"2111","0933","123456"));
+        addUser(new Member("tam",2004,"111","03233","123456"));
+        addDocument(new Book("oop","nvh","123",1,"st"));
+        addDocument(new Book("lol","riot","000",2,"game"));
     }
 
     public static Library getInstance() {
@@ -65,7 +70,24 @@ public class Library {
         return false;
     }
 
-    public boolean userBorrow(String ISBN, String userId) {
+    public boolean isUserBorrowed(String ISBN, String userId) throws UserNotFoundException, ISBNNotFoundException{
+        Optional<User> userOpt = findUserByUserId(userId);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            if (user instanceof Member) {
+                Optional<Document> docOpt = findDocumentByIBSN(ISBN);
+                if (docOpt.isPresent()) {
+                    Document doc = docOpt.get();
+                    if (((Member) user).isBorrowedDocument(doc)) {
+                        return true;
+                    }
+                } else {throw new ISBNNotFoundException();}
+            }
+        } else { throw new UserNotFoundException();}
+        return false;
+    }
+
+    public boolean userBorrow(String ISBN, String userId) throws UserNotFoundException, ISBNNotFoundException, NoDocumentAvailableException {
         Optional<User> userOpt = findUserByUserId(userId);
         if (userOpt.isPresent()) {
             User user = userOpt.get();
@@ -74,13 +96,14 @@ public class Library {
                 if (docOpt.isPresent()) {
                     Document doc = docOpt.get();
                     if (doc.getQuantity() > 0) {
-                        doc.setQuantity(doc.getQuantity() - 1);
-                        ((Member) user).borrowDocument(doc);
-                        return true;
-                    }
-                }
+                        if(((Member) user).borrowDocument(doc)) {
+                            doc.setQuantity(doc.getQuantity() - 1);
+                            return true;
+                        }
+                    } else {throw new NoDocumentAvailableException();}
+                } else { throw new ISBNNotFoundException();}
             }
-        }
+        } else { throw new UserNotFoundException();}
 //            for (User user : users) {
 //                if(user.getUserId().equals(userId) && user instanceof Member) {
 //                    for (Document document : documents) {
@@ -95,26 +118,52 @@ public class Library {
             return false;
     }
 
-    public boolean userReturn(String ISBN, String userId) {
-        for (User user : users) {
-            if(user.getUserId().equals(userId) && user instanceof Member) {
-                for (Document document : documents) {
-                    if(document.getISBN().equals(ISBN)) {
-                        document.setQuantity(document.getQuantity() + 1);
-                        ((Member) user).returnBorrowedDocument(document);
+    public boolean userReturn(String ISBN, String userId) throws UserNotFoundException, ISBNNotFoundException {
+        Optional<User> userOpt = findUserByUserId(userId);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            if (user instanceof Member) {
+                Optional<Document> docOpt = findDocumentByIBSN(ISBN);
+                if (docOpt.isPresent()) {
+                    Document document = docOpt.get();
+                    document.setQuantity(document.getQuantity() + 1);
+                    if(((Member) user).returnBorrowedDocument(document)){
                         return true;
                     }
-                }
+                    return false;
+                } else { throw new ISBNNotFoundException();}
+            }
+        } else { throw new UserNotFoundException();}
+        return false;
+
+//        for (User user : users) {
+//            if(user.getUserId().equals(userId) && user instanceof Member) {
+//                for (Document document : documents) {
+//                    if(document.getISBN().equals(ISBN)) {
+//                        document.setQuantity(document.getQuantity() + 1);
+//                        if(((Member) user).returnBorrowedDocument(document)){
+//                            return true;
+//                        }
+//                        return false;
+//                    }
+//                }
+//            }
+//        }
+//        return false;
+    }
+
+    public boolean isISBNExist(String ISBN) {
+        for (Document doc : documents) {
+            if(doc.getISBN().equals(ISBN)) {
+                return true;
             }
         }
         return false;
     }
 
     public boolean addDocument(Document document) {
-        for (Document doc : documents) {
-            if(doc.getISBN().equals(document.getISBN())) {
-                return false;
-            }
+        if (isISBNExist(document.getISBN())) {
+            return false;
         }
         documents.add(document);
         return true;

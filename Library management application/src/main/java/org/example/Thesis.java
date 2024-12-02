@@ -1,3 +1,5 @@
+package org.example;
+
 public class Thesis extends Document {
     private String topic;
     public Thesis(String title, String author, String ISBN, int quantity, String topic) {

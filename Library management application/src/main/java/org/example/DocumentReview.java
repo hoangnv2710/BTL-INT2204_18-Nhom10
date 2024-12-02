@@ -1,3 +1,5 @@
+package org.example;
+
 public class DocumentReview {
     private String reviewText ="";
     private double reviewScore;

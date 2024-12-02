@@ -1,3 +1,5 @@
+package org.example;
+
 public class Book extends Document {
     private String genre;
     public Book(String title, String author, String ISBN, int quantity, String genre) {

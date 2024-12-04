@@ -8,6 +8,6 @@ public class Librarian extends User {
 
     @Override
     public String printInfo() {
-        return String.format("User ID: %s\n\tPassword: %s\n\tName: %s\n\tYear of Birth: %d\n\tPhone number: %s\n", userId, password, name, yearOfBirth, phoneNumber);
+        return String.format("Librarian ID: %s\n\tPassword: %s\n\tName: %s\n\tYear of Birth: %d\n\tPhone number: %s\n", userId, password, name, yearOfBirth, phoneNumber);
     }
 }

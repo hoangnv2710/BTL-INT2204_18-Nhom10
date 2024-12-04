@@ -6,7 +6,6 @@ import java.util.Optional;
 
 public class Library {
     private static Library instance;
-
     private List<Document> documents;
     private List<User> users;
 
@@ -34,7 +33,6 @@ public class Library {
     public List<User> getUsers() {
         return users;
     }
-
 
     public boolean addUser(User newUser) {
         Optional<User> userOpt = findUserByUserId(newUser.getUserId());

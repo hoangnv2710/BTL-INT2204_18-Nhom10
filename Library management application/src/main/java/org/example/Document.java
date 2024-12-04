@@ -75,7 +75,6 @@ public abstract class Document {
         this.quantity = quantity;
     }
 
-
     public abstract String printInfo();
 
 }

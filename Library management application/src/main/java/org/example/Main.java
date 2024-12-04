@@ -10,9 +10,20 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Login login = Login.getInstance();
-        login.login("2102","123456");
-        CommandLine.commandLineStart();
+        Book b1 = new Book("math","Nguyen Van Hoang","978-3-16-148410-0",3,"study");
+        Thesis t1 = new Thesis("thesis test","HoangNV","VNU-2102-0435",1,"test");
+        Member m1 = new Member("tien",2003,"2111","0933","123456");
+        m1.borrowDocument(b1);
+        m1.borrowDocument(t1);
+        String result = m1.printInfo();
+        System.out.println(result);
+//        Librarian l1 = new Librarian("Hoang",2003,"21020435","0948702162","123456");
+//        String result = l1.printInfo();
+//        System.out.println(result);
+
+//        Login login = Login.getInstance();
+//        login.login("2102","123456");
+//        CommandLine.commandLineStart();
 
 //        Library library = Library.getInstance();
 //        User a = new Member("tam",2004,"112","03233","123456");

@@ -57,7 +57,8 @@ public class Member extends User {
         } else {
             String info = name + " has borrowed the following documents\n";
             for (Document document : borrowedDocuments) {
-                info += "\t" + document.getISBN() + " - " + document.getTitle() + " - " + document.getAuthor()   + "\n";
+                info += String.format("\t %-20s: %s - %s\n", document.getISBN(), document.getTitle(), document.getAuthor());
+                //info += "\t" + document.getISBN() + " \t\t: " + document.getTitle() + " - " + document.getAuthor()   + "\n";
             }
             return info;
         }
@@ -65,7 +66,7 @@ public class Member extends User {
 
     @Override
     public String printInfo() {
-        return String.format("User ID: %s\n\tPassword: %s\n\tName: %s\n\tYear of Birth: %d\n\tPhone number: %s\n",
+        return String.format("Member ID: %s\n\tPassword: %s\n\tName: %s\n\tYear of Birth: %d\n\tPhone number: %s\n",
                 userId, password, name, yearOfBirth, phoneNumber) + borrowedInfo();
     }
 

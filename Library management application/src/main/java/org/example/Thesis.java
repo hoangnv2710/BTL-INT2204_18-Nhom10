@@ -2,8 +2,8 @@ package org.example;
 
 public class Thesis extends Document {
     private String topic;
-    public Thesis(String title, String author, String ISBN, int quantity, String topic) {
-        super(title, author, ISBN, quantity);
+    public Thesis(String title, String author, String ISRN, int quantity, String topic) {
+        super(title, author, ISRN, quantity);
         this.topic = topic;
     }
 
@@ -17,7 +17,7 @@ public class Thesis extends Document {
 
     @Override
     public String printInfo() {
-        return String.format("ISBN: %s\n\tTitle: %s\n\tAuthor: %s\n\tDocument type: Thesis\n\tTopic: %s\n\tQuantity: %d\n",
+        return String.format("ISRN: %s\n\tTitle: %s\n\tAuthor: %s\n\tDocument type: Thesis\n\tTopic: %s\n\tQuantity: %d\n",
                 ISBN, title, author, topic, quantity);
     }
 }

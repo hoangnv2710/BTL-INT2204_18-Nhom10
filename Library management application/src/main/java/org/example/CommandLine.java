@@ -17,7 +17,7 @@ public class CommandLine {
                 System.out.println("[2] Remove Document");
                 System.out.println("[3] Update Document");
                 System.out.println("[4] Find Document");
-                System.out.println("[5] Display Document");
+                System.out.println("[5] Display All Document");
                 System.out.println("[6] Add User");
                 System.out.println("[7] Borrow Document");
                 System.out.println("[8] Return Document");
@@ -46,7 +46,7 @@ public class CommandLine {
                         CommandLine.findDocumentCommand();
                         break;
                     case 5:
-                        CommandLine.displayDocumentCommand();
+                        CommandLine.displayAllDocumentCommand();
                         break;
                     case 6:
                         CommandLine.addUserCommand();
@@ -239,6 +239,7 @@ public class CommandLine {
                         int newQuantity = s.nextInt();
                         doc.setQuantity(newQuantity);
                     }
+                    System.out.println("Updated successfully");
                 }
             }
         } catch (InputMismatchException e) {
@@ -324,7 +325,7 @@ public class CommandLine {
 
     }
 
-    public static void displayDocumentCommand() {
+    public static void displayAllDocumentCommand() {
         Library library = Library.getInstance();
 //        System.out.println("Enter the document ISBN:");
 //        Scanner s = new Scanner(System.in);
@@ -591,6 +592,4 @@ public class CommandLine {
             loginCommand();
         }
     }
-
-
 }

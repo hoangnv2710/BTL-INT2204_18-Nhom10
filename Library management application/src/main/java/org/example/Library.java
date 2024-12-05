@@ -52,41 +52,6 @@ public class Library {
         return Optional.empty();
     }
 
-    public boolean removeUser(User user) {
-        if (users.contains(user)) {
-            users.remove(user);
-            return true;
-        }
-        return false;
-
-    }
-
-    public boolean removeUserByUserId(String userId) {
-        Optional<User> userOpt = findUserByUserId(userId);
-        if (userOpt.isPresent()) {
-            users.remove(userOpt.get());
-            return true;
-        }
-        return false;
-    }
-
-    public boolean isUserBorrowed(String ISBN, String userId) throws UserNotFoundException, ISBNNotFoundException{
-        Optional<User> userOpt = findUserByUserId(userId);
-        if (userOpt.isPresent()) {
-            User user = userOpt.get();
-            if (user instanceof Member) {
-                Optional<Document> docOpt = findDocumentByIBSN(ISBN);
-                if (docOpt.isPresent()) {
-                    Document doc = docOpt.get();
-                    if (((Member) user).isBorrowedDocument(doc)) {
-                        return true;
-                    }
-                } else {throw new ISBNNotFoundException();}
-            }
-        } else { throw new UserNotFoundException();}
-        return false;
-    }
-
     public boolean userBorrow(String ISBN, String userId) throws UserNotFoundException, ISBNNotFoundException, NoDocumentAvailableException {
         Optional<User> userOpt = findUserByUserId(userId);
         if (userOpt.isPresent()) {

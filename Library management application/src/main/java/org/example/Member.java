@@ -4,59 +4,54 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Member extends User {
-    private List<Document> borrowedDocuments = new ArrayList<Document>();
+    private List<Document> borrowList = new ArrayList<Document>();
 
     public Member(String name, int yearOfBirth, String userId, String phoneNumber, String password) {
         super(name, yearOfBirth, userId, phoneNumber, password);
-        this.borrowedDocuments = new ArrayList<Document>();
+        this.borrowList = new ArrayList<Document>();
     }
 
-    public List<Document> getBorrowedDocuments() {
-        return borrowedDocuments;
+    public List<Document> getborrowList() {
+        return borrowList;
     }
 
-    public void setBorrowedDocuments(List<Document> borrowedDocuments) {
-        this.borrowedDocuments = borrowedDocuments;
+    public void setborrowList(List<Document> borrowList) {
+        this.borrowList = borrowList;
     }
 
     public boolean borrowDocument(Document document) {
-        if (!this.borrowedDocuments.contains(document)) {
-            borrowedDocuments.add(document);
+        if (!this.borrowList.contains(document)) {
+            borrowList.add(document);
             return true;
         }
         return false;
     }
 
-    public void borrowDocuments(List<Document> documents) {
-        for (Document document : documents) {
-            borrowedDocuments.add(document);
-        }
-    }
 
     public boolean isBorrowedDocument(Document document) {
-        return borrowedDocuments.contains(document);
+        return borrowList.contains(document);
     }
 
     public boolean returnBorrowedDocument(Document document) {
-        if(borrowedDocuments.contains(document)) {
-            this.borrowedDocuments.remove(document);
+        if(borrowList.contains(document)) {
+            this.borrowList.remove(document);
             return true;
         }
         return false;
     }
 
-    public void returnBorrowedDocuments(List<Document> documents) {
+    public void returnborrowList(List<Document> documents) {
         for (Document document : documents) {
             returnBorrowedDocument(document);
         }
     }
 
     public String borrowedInfo() {
-        if (borrowedDocuments.isEmpty()) {
+        if (borrowList.isEmpty()) {
             return name + " hasn't borrowed any documents.";
         } else {
             String info = name + " has borrowed the following documents\n";
-            for (Document document : borrowedDocuments) {
+            for (Document document : borrowList) {
                 info += String.format("\t %-20s: %s - %s\n", document.getISBN(), document.getTitle(), document.getAuthor());
                 //info += "\t" + document.getISBN() + " \t\t: " + document.getTitle() + " - " + document.getAuthor()   + "\n";
             }

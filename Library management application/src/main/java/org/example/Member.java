@@ -53,7 +53,6 @@ public class Member extends User {
             String info = name + " has borrowed the following documents\n";
             for (Document document : borrowList) {
                 info += String.format("\t %-20s: %s - %s\n", document.getISBN(), document.getTitle(), document.getAuthor());
-                //info += "\t" + document.getISBN() + " \t\t: " + document.getTitle() + " - " + document.getAuthor()   + "\n";
             }
             return info;
         }

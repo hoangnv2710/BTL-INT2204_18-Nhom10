@@ -15,8 +15,11 @@ public class Library {
         addUser(new Librarian("Hoang",2003,"2102","0948","123456"));
         addUser(new Member("tien",2003,"2111","0933","123456"));
         addUser(new Member("tam",2004,"111","03233","123456"));
-        addDocument(new Book("oop","nvh","123",1,"st"));
-        addDocument(new Book("lol","riot","000",2,"game"));
+        addDocument(new Book("math","Nguyen Van Hoang","978-3-16-148410-0",3,"study"));
+        addDocument(new Book("physics","Tran Thi Mai","978-1-4028-9462-6",2,"reference"));
+        addDocument(new Book("chemistry","Le Quang Hieu","978-0-545-01022-1",5,"study"));
+        addDocument(new Book("biology","Pham Minh Tuan","978-0-06-112241-5",4,"research"));
+        addDocument(new Book("history","Dang Thi Lan","978-0-141-03435-8",6,"textbook"));
     }
 
     public static Library getInstance() {
@@ -100,21 +103,6 @@ public class Library {
             }
         } else { throw new UserNotFoundException();}
         return false;
-
-//        for (User user : users) {
-//            if(user.getUserId().equals(userId) && user instanceof Member) {
-//                for (Document document : documents) {
-//                    if(document.getISBN().equals(ISBN)) {
-//                        document.setQuantity(document.getQuantity() + 1);
-//                        if(((Member) user).returnBorrowedDocument(document)){
-//                            return true;
-//                        }
-//                        return false;
-//                    }
-//                }
-//            }
-//        }
-//        return false;
     }
 
     public boolean isISBNExist(String ISBN) {
@@ -203,7 +191,7 @@ public class Library {
     public String printDocumentsInfo() {
         String info = "";
         for (Document document : documents) {
-            info += document.printInfo() + "\n";
+            info += document.printInfo();
         }
             return info;
     }

@@ -327,16 +327,6 @@ public class CommandLine {
 
     public static void displayAllDocumentCommand() {
         Library library = Library.getInstance();
-//        System.out.println("Enter the document ISBN:");
-//        Scanner s = new Scanner(System.in);
-//        String ISBN = s.nextLine();
-//        Optional<Document> docOpt = library.findDocumentByIBSN(ISBN);
-//        if (docOpt.isPresent()) {
-//            System.out.println(docOpt.get().printInfo());
-//        } else {
-//            System.out.println("Document not found!");
-//        }
-
         System.out.println(library.printDocumentsInfo());
     }
 

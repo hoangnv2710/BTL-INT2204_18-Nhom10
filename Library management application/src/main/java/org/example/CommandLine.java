@@ -78,123 +78,136 @@ public class CommandLine {
     }
 
     public static void addDocumentCommand() {
-        try {
-            Scanner s = new Scanner(System.in);
-            Library library = Library.getInstance();
-            System.out.println("Enter the information for the document you want to add.");
-            String title = "";
-            do {
-                System.out.println("Enter the document title:");
-                title = s.nextLine();
-                if (title.equals("")) {
-                    System.out.println("Title cannot be empty. Please try again!");
+        Login login = Login.getInstance();
+        if (!login.isLoggedIn()) {
+            System.out.println("You are not logged in!");
+        } else if (login.isLoggedIn() && login.getUserLoggedIn() instanceof Member) {
+            System.out.println("You do not have permission to access this feature!");
+        } else {
+            try {
+                Scanner s = new Scanner(System.in);
+                Library library = Library.getInstance();
+                System.out.println("Enter the information for the document you want to add.");
+                String title = "";
+                do {
+                    System.out.println("Enter the document title:");
+                    title = s.nextLine();
+                    if (title.equals("")) {
+                        System.out.println("Title cannot be empty. Please try again!");
+                    }
+                } while (title.equals(""));
+
+                System.out.println("Enter the document author:");
+                String author = s.nextLine();
+
+                String ISBN = "";
+                do {
+                    System.out.println("Enter the document ISBN:");
+                    ISBN = s.nextLine();
+                    if (ISBN.equals("")) {
+                        System.out.println("The ISBN cannot be empty. Please try again!");
+                    } else if (library.isISBNExist(ISBN)) {
+                        System.out.println("The ISBN already exists. Please try again!");
+                        ISBN = "";
+                    }
+                } while (ISBN.equals(""));
+
+                int quantity = 0;
+                do {
+                    System.out.println("Enter the document quantity:");
+                    quantity = s.nextInt();
+                    if (quantity < 0) {
+                        System.out.println("Quantity cannot be negative. Please try again!");
+                    }
+                } while (quantity < 0);
+
+                int choice;
+                do {
+                    System.out.println("Select document type:");
+                    System.out.println("[1] Book");
+                    System.out.println("[2] Thesis");
+                    choice = s.nextInt();
+                    s.nextLine();
+                } while (choice != 1 && choice != 2);
+
+                Document doc;
+                if (choice == 1) {
+                    System.out.println("Enter book genre:");
+                    String genre = s.nextLine();
+                    doc = new Book(title, author, ISBN, quantity, genre);
+                } else {
+                    System.out.println("Enter thesis topic:");
+                    String topic = s.nextLine();
+                    doc = new Thesis(title, author, ISBN, quantity, topic);
                 }
-            } while (title.equals(""));
-            
-            System.out.println("Enter the document author:");
-            String author = s.nextLine();
 
-            String ISBN = "";
-            do {
-                System.out.println("Enter the document ISBN:");
-                ISBN = s.nextLine();
-                if (ISBN.equals("")) {
-                    System.out.println("The ISBN cannot be empty. Please try again!");
-                } else if (library.isISBNExist(ISBN)) {
-                    System.out.println("The ISBN already exists. Please try again!");
-                    ISBN = "";
+                choice = -1;
+
+                do {
+                    System.out.println("Do you want to save?");
+                    System.out.println("[0] NO");
+                    System.out.println("[1] YES");
+                    choice = s.nextInt();
+                    if (choice < 0 || choice > 1) {
+                        System.out.println("Please try again!");
+                    } else if (choice == 0) {
+                        return;
+                    }
+                } while (choice < 0 || choice > 1);
+
+                if (library.addDocument(doc)) {
+                    System.out.println("Document added successfully!");
+                } else {
+                    System.out.println("Unable to add the document!");
                 }
-            } while (ISBN.equals(""));
-
-            int quantity = 0;
-            do {
-                System.out.println("Enter the document quantity:");
-                quantity = s.nextInt();
-                if ( quantity < 0) {
-                    System.out.println("Quantity cannot be negative. Please try again!");
-                }
-            } while (quantity < 0);
-
-            int choice;
-            do {
-                System.out.println("Select document type:");
-                System.out.println("[1] Book");
-                System.out.println("[2] Thesis");
-                choice = s.nextInt();
-                s.nextLine();
-            } while (choice != 1 && choice != 2);
-
-            Document doc;
-            if (choice == 1) {
-                System.out.println("Enter book genre:");
-                String genre = s.nextLine();
-                doc = new Book(title,author,ISBN,quantity,genre);
-            } else {
-                System.out.println("Enter thesis topic:");
-                String topic = s.nextLine();
-                doc = new Thesis(title,author,ISBN,quantity,topic);
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please try again!");
+                addDocumentCommand();
             }
-
-            choice = -1;
-
-            do {
-                System.out.println("Do you want to save?");
-                System.out.println("[0] NO");
-                System.out.println("[1] YES");
-                choice = s.nextInt();
-                if (choice < 0 || choice > 1) {
-                    System.out.println("Please try again!");
-                } else if (choice == 0) {
-                    return;
-                }
-            } while (choice < 0 || choice > 1);
-
-            if(library.addDocument(doc)) {
-                System.out.println("Document added successfully!");
-            } else {
-                System.out.println("Unable to add the document!");
-            }
-        } catch (InputMismatchException e) {
-            System.out.println("Invalid input. Please try again!");
-            addDocumentCommand();
         }
     }
 
     public static void reomoveDocumentCommand() {
-        Scanner s = new Scanner(System.in);
-        Library library = Library.getInstance();
-
-        String ISBN = "";
-        do {
-            System.out.println("Enter the ISBN of the document you want to remove:");
-            ISBN = s.nextLine();
-            if (ISBN.equals("")) {
-                System.out.println("The ISBN cannot be empty. Please try again!");
-            } else if (!library.isISBNExist(ISBN)) {
-                System.out.println("The ISBN does not exists. Do you want to try again?");
-                int choice;
-
-                do {
-                    System.out.println("Select your choice:");
-                    System.out.println("[0] No, take me back to the main menu");
-                    System.out.println("[1] Yes, I’d like to try again");
-                    System.out.println("[2] I forgot the ISBN. I’ll find the document first");
-                    choice = s.nextInt();
-                    s.nextLine();
-                    if (choice == 0) {
-                        return;
-                    } else if (choice == 2) {
-                        findDocumentCommand();
-                    }
-                } while (choice < 0 || choice > 2);
-                ISBN = "";
-            }
-        } while (ISBN.equals(""));
-
-        if(library.removeDocumentByISBN(ISBN)) {
-            System.out.println("Document removed successfully!");
+        Login login = Login.getInstance();
+        if (!login.isLoggedIn()) {
+            System.out.println("You are not logged in!");
+        } else if (login.isLoggedIn() && login.getUserLoggedIn() instanceof Member) {
+            System.out.println("You do not have permission to access this feature!");
         } else {
-            System.out.println("Unable to remove the document. Something went wrong!");
+            Scanner s = new Scanner(System.in);
+            Library library = Library.getInstance();
+            String ISBN = "";
+            do {
+                System.out.println("Enter the ISBN of the document you want to remove:");
+                ISBN = s.nextLine();
+                if (ISBN.equals("")) {
+                    System.out.println("The ISBN cannot be empty. Please try again!");
+                } else if (!library.isISBNExist(ISBN)) {
+                    System.out.println("The ISBN does not exists. Do you want to try again?");
+                    int choice;
+
+                    do {
+                        System.out.println("Select your choice:");
+                        System.out.println("[0] No, take me back to the main menu");
+                        System.out.println("[1] Yes, I’d like to try again");
+                        System.out.println("[2] I forgot the ISBN. I’ll find the document first");
+                        choice = s.nextInt();
+                        s.nextLine();
+                        if (choice == 0) {
+                            return;
+                        } else if (choice == 2) {
+                            findDocumentCommand();
+                        }
+                    } while (choice < 0 || choice > 2);
+                    ISBN = "";
+                }
+            } while (ISBN.equals(""));
+
+            if (library.removeDocumentByISBN(ISBN)) {
+                System.out.println("Document removed successfully!");
+            } else {
+                System.out.println("Unable to remove the document. Something went wrong!");
+            }
         }
     }
 

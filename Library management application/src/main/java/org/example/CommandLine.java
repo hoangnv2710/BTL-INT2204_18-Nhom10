@@ -80,7 +80,7 @@ public class CommandLine {
     public static void addDocumentCommand() {
         Login login = Login.getInstance();
         if (!login.isLoggedIn()) {
-            System.out.println("You are not logged in!");
+            System.out.println("You need to log in to access this feature!");
         } else if (login.isLoggedIn() && login.getUserLoggedIn() instanceof Member) {
             System.out.println("You do not have permission to access this feature!");
         } else {
@@ -170,7 +170,7 @@ public class CommandLine {
     public static void reomoveDocumentCommand() {
         Login login = Login.getInstance();
         if (!login.isLoggedIn()) {
-            System.out.println("You are not logged in!");
+            System.out.println("You need to log in to access this feature!");
         } else if (login.isLoggedIn() && login.getUserLoggedIn() instanceof Member) {
             System.out.println("You do not have permission to access this feature!");
         } else {
@@ -215,7 +215,7 @@ public class CommandLine {
         try {
             Login login = Login.getInstance();
             if (!login.isLoggedIn()) {
-                System.out.println("You are not logged in!");
+                System.out.println("You need to log in to access this feature!");
             } else if (login.isLoggedIn() && login.getUserLoggedIn() instanceof Member) {
                 System.out.println("You do not have permission to access this feature!");
             } else {
@@ -439,7 +439,7 @@ public class CommandLine {
     public static void returnDocumentCommand() {
         Login login = Login.getInstance();
         if (!login.isLoggedIn()) {
-            System.out.println("You are not logged in!");
+            System.out.println("You need to log in to access this feature!");
         } else if (login.isLoggedIn() && login.getUserLoggedIn() instanceof Member) {
             System.out.println("Please contact the librarian!");
         } else {
@@ -457,10 +457,11 @@ public class CommandLine {
                 }
             } catch (UserNotFoundException e) {
                 System.out.println("User not found. Please try again!");
-                reomoveDocumentCommand();
+                returnDocumentCommand();
             } catch (ISBNNotFoundException e) {
                 System.out.println("ISBN not found. Please try again!");
-                reomoveDocumentCommand();
+                returnDocumentCommand();
+                returnDocumentCommand();
             }
 
         }
@@ -488,11 +489,12 @@ public class CommandLine {
     }
 
     public static void reviewCommand() {
-        try {
-            Login login = Login.getInstance();
-            Scanner s = new Scanner(System.in);
-
-            if (login.isLoggedIn()) {
+        Login login = Login.getInstance();
+        if (!login.isLoggedIn()) {
+            System.out.println("You need to log in to access this feature!");
+        } else {
+            try {
+                Scanner s = new Scanner(System.in);
                 Library library = Library.getInstance();
                 int choice;
                 do {
@@ -530,12 +532,10 @@ public class CommandLine {
 
                 } while (choice != 0 && choice != 1 && choice != 2);
 
-            } else {
-                System.out.println("You need to log in to access this feature!");
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please try again!");
+                reviewCommand();
             }
-        } catch (InputMismatchException e) {
-            System.out.println("Invalid input. Please try again!");
-            reviewCommand();
         }
     }
 
@@ -566,7 +566,7 @@ public class CommandLine {
                     return;
                 }
             } else {
-                System.out.println("You are not logged in!");
+                System.out.println("You aren't logged in!");
                 System.out.println("If you don't have an account, please contact the librarian!");
                 int choice;
                 do {
